@@ -3,7 +3,6 @@ REPORT_INTERVAL = 5000
 DEBUG = false
 RECORDERS = [ 'mousemove', 'mouseenter', 'mouseleave', 'mouseover', 'mouseup'
               'mousedown', 'scroll' ]
-events = []
 
 window.Soarec = class Soarec
   instance = null
@@ -11,6 +10,7 @@ window.Soarec = class Soarec
   class PrivateClass
     constructor:  ->
       @recording = false
+      @events = []
 
     toggle: ->
       @recording = !@recording
@@ -33,7 +33,7 @@ recordEvent = (event) ->
     } if event.toElement?
   }
   console.log event if DEBUG
-  events.push hash
+  Soarec.get().events.push hash
 
 for recorder in RECORDERS
   document.addEventListener(recorder, recordEvent)
@@ -41,9 +41,9 @@ for recorder in RECORDERS
 sendReport = () ->
   r = new XMLHttpRequest
   r.open 'POST', SOAREC_API_URL, true
-  json_string = JSON.stringify(events: events, timestamp: new Date().getTime().toString())
+  json_string = JSON.stringify(events: Soarec.get().events, timestamp: new Date().getTime().toString())
   console.log json_string if DEBUG
-  events = []
+  Soarec.get().events = []
   r.send json_string if Soarec.get().recording
 
 setInterval(sendReport, REPORT_INTERVAL)

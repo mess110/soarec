@@ -12,6 +12,7 @@ setInterval ->
       log.innerHTML = 'Recording in 1..'
     when 4
       log.innerHTML = 'Recording NOW'
+      Soarec.get().events = []
       Soarec.get().toggle()
     when 9
       log.innerHTML = 'Recording finished'

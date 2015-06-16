@@ -12,7 +12,7 @@ addCanvas = (heatmapData) ->
 addFakeCursor = () ->
   s = document.createElement('span')
   s.setAttribute('id', 'fake-cursor')
-  s.setAttribute('style', 'position: absolute;')
+  s.setAttribute('style', 'position: absolute; width: 10px; height: 10px; background-color: black; overflow: hidden')
   s.innerHTML = '.'
   document.body.appendChild(s)
 
@@ -28,7 +28,7 @@ draw = (result) ->
   heatmapData = []
   sleep_time = 0
   for ev in result[result.length - 1]['events']
-    weight = if ev.type == 'mousedown' then 1 else 0.001
+    weight = if ev.type == 'mousedown' then 1 else 0.01
     heatmapData.push [ev.x, ev.y, weight]
     sleep_time += 50
     setTimeout(((ev) ->
